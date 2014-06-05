@@ -106,7 +106,7 @@ class Unirest
 	 */
 	public static function post($url, $headers = array(), $body = NULL)
 	{
-		return Unirest::equest("POST", $url, $body, $headers);
+		return Unirest::request("POST", $url, $body, $headers);
 	}
 
 	/**
