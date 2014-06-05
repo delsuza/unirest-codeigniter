@@ -92,9 +92,9 @@ class Unirest
 	 * @param  array  $headers Additional headers to send
 	 * @return string|stdObj   Response string or stdObj if response is json-decodable
 	 */
-	public static function get($url, $headers = array())
+	public static function get($url, $headers = array(), $body = NULL)
 	{
-		return Unirest::request("GET", $url, NULL, $headers);
+		return Unirest::request("GET", $url, $body, $headers);
 	}
 
 	/**
@@ -168,11 +168,19 @@ class Unirest
 		if ($httpMethod != "GET") {
 			curl_setopt ($ch, CURLOPT_CUSTOMREQUEST, $httpMethod);
 			curl_setopt ($ch, CURLOPT_POSTFIELDS, $body);
+		} else {
+			if ($body != NULL) {
+				$url .= '?';
+				foreach ($body as $key => $value) {
+					$url .= '&'.$key.'='.$value;
+				}
+			}
+			
 		}
-
+		
 		curl_setopt ($ch, CURLOPT_URL , Unirest::encodeUrl($url));
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true);
+/* 		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true); */
 		curl_setopt ($ch, CURLOPT_MAXREDIRS, 10);
 		curl_setopt ($ch, CURLOPT_HTTPHEADER, $lowercaseHeaders);
 		curl_setopt ($ch, CURLOPT_HEADER, true);
